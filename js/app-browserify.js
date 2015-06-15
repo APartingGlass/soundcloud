@@ -6,21 +6,98 @@ require("es5-shim")
 require("babel/register")
 
 var Promise = require('es6-promise').Promise
-// just Node?
-// var fetch = require('node-fetch')
-// Browserify?
-// require('whatwg-fetch') //--> not a typo, don't store as a var
 
-// other stuff that we don't really use in our own code
-// var Pace = require("../bower_components/pace/pace.js")
 
-// require your own libraries, too!
-// var Router = require('./app.js')
+var Backbone = require('backbone')
+var React = require('react')
 
-// window.addEventListener('load', app)
+var apikey = `c1e08233049fb45bea793e4c0e7e4b27`
+var secret = `ff73e90235bd4bd416f27ebd9db2f3fb`
+var qs = (s, d) => (d || document).querySelector(s)
 
-// function app() {
-    // start app
-    // new Router()
-// }
+var SoundcloudCollection = Backbone.Collection.extend({
+	url: (apikey) => `https://api.soundcloud.com/tracks?client_id=${apikey}`
+})
+
+
+class SoundcloudItem extends React.Component {
+	constructor(props)
+	super(props)
+	this.props.item
+
+	render(){
+		return (<li>this.props.item.get('name') - {this.props.time.toTimeString()}</li>)
+	}
+}
+
+class SoundcloudView extends React.Component {
+	constructor(props) {
+		super(props)
+		this.props.items.on('sync', this.forceUpdate.bind(this) )
+		this.state = {
+			time: new Date()
+		}
+
+		setInterval(() => {
+			this.setState({ time: new Date() })
+		}, 1000)
+
+	}
+
+	render(){
+		return (
+			var url = this.props.item.get('permalink_url')
+				artwork_url = this.props.item.get('artwork_url')
+				img = artwork_url ? (<img src={}>)
+
+				<h1>{this.props.title} - <span>{this.state.toTimeString()}</span></h1>
+				<ul>
+					{this.props.items.map((i) => <SoundcloudItem key={i.id} item={i}  
+						time={}/>)}
+				</ul>
+			</div>
+		)
+	}
+
+}
+
+var collection = new SoundcloudCollection()
+collection.fetch().then(() => {
+	React.render(<SoundcloudView name = "hannah" items={[]}/>, qs('.container') )
+	})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
