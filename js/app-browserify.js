@@ -53,7 +53,6 @@ class ListView extends React.Component {
     constructor(props) {
         super(props)
         this.props.items.on('sync', () => this.forceUpdate())
-
     }
     render() {
         return (<div>
@@ -79,11 +78,18 @@ class Player extends React.Component {
         </div>)
     }
 }
-var search = function (query) {var test = new SoundSearchCollection
-        test.query = query
-        React.render(<ListView title='testing' items ={test}/>, qs('.container'))
-        test.fetch()}
+var search = function (query) {
+    var test = new SoundSearchCollection
+    test.query = query
+    React.render(<ListView title='testing' items ={test}/>, qs('.container'))
+    test.fetch()
+}
 
 SC.stream("/tracks/154826334", function(sound){
-  sound.play();
+    console.log(sound)
 });
+
+qs('form').addEventListener('submit', (e) => {
+    e.preventDefault()
+    search(qs('input').value)
+})
