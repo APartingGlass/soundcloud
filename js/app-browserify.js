@@ -26,12 +26,12 @@ var SoundcloudModel = Backbone.Model.extend({
 })
 
 // A query search of tracks represented by collection
-var SoundSearchCollection = Backbone.Collection.extend({
+window.SoundSearchCollection = Backbone.Collection.extend({
     initialize: function() {
         this.on('sync', console.log(this))
     },
     url: function() {
-        return `https://api.soundcloud.com/tracks?q=${this.get('query')}&client_id=${apikey}`
+        return `https://api.soundcloud.com/tracks?q=${this.query}&client_id=${apikey}`
     }
 })
 
@@ -53,16 +53,37 @@ class ListView extends React.Component {
     constructor(props) {
         super(props)
         this.props.items.on('sync', () => this.forceUpdate())
+
     }
     render() {
         return (<div>
                         <ul>
-                            {this.props.items.models.map((x) => <ListItem id={x.id} item={x}/>)}
+                            {this.props.items.models.map((x) => <ListItem key={x.id} item={x}/>)}
                         </ul>
                     </div>)}
 }
 
-var test = new SoundSearchCollection
-test.query = 'rock and roll'
-React.render(<ListView title='testing' items ={test}/>, qs('.container'))
-test.fetch()
+class Player extends React.Component {
+    constructor(props) {
+        super(props)
+        this.props.items.on('sync', () => this.forceUpdate())
+    }
+    render() {
+        return (<div class="player">
+            <div class="top">
+                <div id="image"></div>
+                <div id="controls"></div>
+                <div id="player"></div>
+            </div>
+            <div class="bottom"></div>
+        </div>)
+    }
+}
+var search = function (query) {var test = new SoundSearchCollection
+        test.query = query
+        React.render(<ListView title='testing' items ={test}/>, qs('.container'))
+        test.fetch()}
+
+SC.stream("/tracks/154826334", function(sound){
+  sound.play();
+});
