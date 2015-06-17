@@ -20,22 +20,44 @@ SC.initialize({
 // Each track's information represented with model
 var SoundcloudModel = Backbone.Model.extend({
     idAttribute: 'id',
-    url: function () {return `https://api.soundcloud.com/tracks/${this.id}?client_id=${apikey}`}
+    url: function() {
+        return `https://api.soundcloud.com/tracks/${this.id}?client_id=${apikey}`
+    }
 })
 
 // A query search of tracks represented by collection
 var SoundSearchCollection = Backbone.Collection.extend({
-    initialize : function() {
+    initialize: function() {
         this.on('sync', console.log(this))
+    },
+    url: function() {
+        return `https://api.soundcloud.com/tracks?q=${this.get('query')}&client_id=${apikey}`
     }
-    url: function() {return `https://api.soundcloud.com/tracks?q=${this.query}&client_id=${apikey}`}
 })
 
 class ListItem extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
     }
     render() {
-        
+
     }
 }
+
+class ListView extends React.Component {
+    constructor(props) {
+        super(props)
+        this.props.items.on('sync', () => this.forceUpdate())
+    }
+    return {
+        <div>
+            <ul>
+                {this.props.models.map(() => <li> </li>)}
+            </ul>
+        </div>
+    }
+}
+
+var test = new SoundSearchCollection
+test.query = 'rock and roll'
+test.fetch()

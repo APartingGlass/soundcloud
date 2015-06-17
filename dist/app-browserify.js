@@ -1,1 +1,1 @@
-console.error("SyntaxError: /Users/michaelzhangcheng/Downloads/soundcloud/js/app-browserify.js: Unexpected token (31:4) while parsing file: /Users/michaelzhangcheng/Downloads/soundcloud/js/app-browserify.js");
+console.error("SyntaxError: /Users/michaelzhangcheng/Downloads/soundcloud/js/app-browserify.js: Unexpected token (52:11) while parsing file: /Users/michaelzhangcheng/Downloads/soundcloud/js/app-browserify.js");
