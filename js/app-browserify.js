@@ -7,7 +7,7 @@ var _ = require('underscore')
 var Backbone = require('backbone')
 var React = require('react')
 
-//essentials
+//essential informations
 var apikey = `c1e08233049fb45bea793e4c0e7e4b27`
 var secret = `ff73e90235bd4bd416f27ebd9db2f3fb`
 var qs = (s, d) => (d || document).querySelector(s)
@@ -35,6 +35,7 @@ window.SoundSearchCollection = Backbone.Collection.extend({
     }
 })
 
+//view template of one search item
 class ListItem extends React.Component {
     constructor(props) {
         super(props)
@@ -49,6 +50,7 @@ class ListItem extends React.Component {
     }
 }
 
+//view template of search list
 class ListView extends React.Component {
     constructor(props) {
         super(props)
@@ -61,7 +63,7 @@ class ListView extends React.Component {
                         </ul>
                     </div>)}
 }
-
+//view template for one player
 class Player extends React.Component {
     constructor(props) {
         super(props)
@@ -78,6 +80,7 @@ class Player extends React.Component {
         </div>)
     }
 }
+//search function which creates new collection, adds a React view to listen for changes, and fetches data
 var search = function (query) {
     var test = new SoundSearchCollection
     test.query = query
@@ -85,8 +88,9 @@ var search = function (query) {
     test.fetch()
 }
 
+///test cases for future functionality
 SC.stream("/tracks/154826334", function(sound){
-    console.log(sound)
+
 });
 
 qs('form').addEventListener('submit', (e) => {
