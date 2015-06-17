@@ -40,7 +40,12 @@ class ListItem extends React.Component {
         super(props)
     }
     render() {
-
+        var artwork_url = this.props.item.attributes.artwork_url,
+            title = this.props.item.attributes.title
+        return (<li>
+                        <h3>{title}</h3> 
+                        <img src={artwork_url}/>
+                        </li>)
     }
 }
 
@@ -49,15 +54,15 @@ class ListView extends React.Component {
         super(props)
         this.props.items.on('sync', () => this.forceUpdate())
     }
-    return {
-        <div>
-            <ul>
-                {this.props.models.map(() => <li> </li>)}
-            </ul>
-        </div>
-    }
+    render() {
+        return (<div>
+                        <ul>
+                            {this.props.items.models.map((x) => <ListItem id={x.id} item={x}/>)}
+                        </ul>
+                    </div>)}
 }
 
 var test = new SoundSearchCollection
 test.query = 'rock and roll'
+React.render(<ListView title='testing' items ={test}/>, qs('.container'))
 test.fetch()
