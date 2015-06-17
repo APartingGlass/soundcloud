@@ -29,8 +29,3 @@ var SoundcloudCollection = Backbone.Collection.extend({
 	model: SoundcloudModel,
 	url: `https://api.soundcloud.com/tracks?client_id=${apikey}`,
 })
-
-
-
-
-
