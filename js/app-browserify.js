@@ -39,8 +39,28 @@ window.SoundSearchCollection = Backbone.Collection.extend({
 class ListItem extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            track: this.props.item.id,
+            playing: false
+        }
+    }
+    toggleSong() {
+        if (this.state.playing) {
+            this.state.song.pause()
+        } else {
+            if(this.state.song){
+                this.state.song.play()
+            } else {
+                SC.stream(`/tracks/${this.state.track}`, (sound) => {
+                    this.setState({song: sound})
+                    sound.play()
+                })
+            }
+        }
+        this.setState({ playing: !this.state.playing})
     }
     render() {
+        console.log(this.props)
         var artwork_url = this.props.item.attributes.artwork_url,
             title = this.props.item.attributes.title,
             likes = this.props.item.attributes.likes_count,
@@ -48,7 +68,7 @@ class ListItem extends React.Component {
 
         return (<div className="player">
                         <div className="top">
-                        <div id="image"><img src={artwork_url}/></div>
+                        <div id="image" onClick={() => this.toggleSong()}><img src={artwork_url}/></div>
                         <div id="controls">
                         	<img id="replay" src="./images/replay4.png"/>     
                         	<img id="last"src="./images/volume51.png"/>
@@ -122,14 +142,3 @@ class Header extends React.Component {
 }
 
 React.render(<Header/>, qs('.header'))
-
-///test cases for future functionality
-// window.songs = []
-// var renderSong = (id) => {
-    // SC.stream(`/tracks/${id}`, function(sound) {
-        // window.songs.push(sound)
-    // })
-// }
-
-
-// search('beatles')
