@@ -42,16 +42,18 @@ class ListItem extends React.Component {
     }
     render() {
         var artwork_url = this.props.item.attributes.artwork_url,
-            title = this.props.item.attributes.title
+            title = this.props.item.attributes.title,
+            likes = this.props.item.attributes.likes_count,
+            played = this.props.item.attributes.playback_count
 
         return (<div className="player">
                         <div className="top">
                         <div id="image"><img src={artwork_url}/></div>
-                        <div id="controls"><h6>{title}
-							<img src="./images/volume51.png"/>
+                        <div id="controls">     
+                        	<img src="./images/volume51.png"/>
                 			<img src="./images/volume49.png"/>
                 			<img src="./images/volume47.png"/>
-                        </h6>
+                			<h6>{title}</h6>
                         </div>
                         <div id="song_length"></div>
                     </div>
@@ -59,9 +61,9 @@ class ListItem extends React.Component {
                     	<img id="logo" src="./images/online36.png"/>
                     	<p>BUY</p>
                 		<img src="./images/play107.png"/>
-                		<h6>1,093,853</h6>
+                		<h6>{played}</h6>
                 		<img src="./images/favorite21.png"/>
-                		<h6>10,116</h6>
+                		<h6>{likes}</h6>
                     </div>
                 </div>)
     }
@@ -99,6 +101,7 @@ class Header extends React.Component {
     }
     render() {
         return (<div>
+        	<div className="header">
             <div className="logo">
                 <img src="./images/logo.png" />
             </div>
@@ -112,6 +115,7 @@ class Header extends React.Component {
             <form onChange={(e) => this.search(e)} onSubmit={(e) => e.preventDefault()}>
                 <input type="text" ref='searchBox'/>
             </form>
+            </div>
         </div>)
     }
 }
