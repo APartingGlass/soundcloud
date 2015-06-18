@@ -62,11 +62,10 @@ class ListView extends React.Component {
         this.props.items.on('sync', () => this.forceUpdate())
     }
     render() {
-        return (<div>
-                        <div grid grid-2-400 grid-4-600>
+        return (<div class ='searchList grid grid-2-400 grid-4-600'>
                             {this.props.items.models.map((x) => <ListItem key={x.id} item={x}/>)}
                         </div>
-                    </div>)}
+                    )}
 }
 //view template for one player
 class Player extends React.Component {
@@ -86,19 +85,24 @@ class Player extends React.Component {
     }
 }
 //search function which creates new collection, adds a React view to listen for changes, and fetches data
-var search = function (query) {
-    var test = new SoundSearchCollection
-    test.query = query
-    React.render(<ListView title='testing' items ={test}/>, qs('.default'))
-    test.fetch()
+var initSearch = function () {
+    var searchColl = new SoundSearchCollection 
+    React.render(<ListView title='searchResults' items ={searchColl}/>, qs('.header'))
+    var search = function (query) {
+        this.collection.query = query
+        this.collection.fetch
+    }
+    search.collection = searchColl
+    return search
 }
+var search = initSearch()
 
 ///test cases for future functionality
 window.songs = []
 var renderSong = (id) => {
     SC.stream(`/tracks/${id}`, function(sound){
         window.songs.push(sound)
-});
+})
 }
 
 qs('form').addEventListener('submit', (e) => {
@@ -106,4 +110,5 @@ qs('form').addEventListener('submit', (e) => {
     search(qs('input').value)
 })
 
-renderSong(293)
+
+
