@@ -62,10 +62,10 @@ class ListView extends React.Component {
         this.props.items.on('sync', () => this.forceUpdate())
     }
     render() {
-        return (<div class ='searchList grid grid-2-400 grid-4-600'>
-                            {this.props.items.models.map((x) => <ListItem key={x.id} item={x}/>)}
-                        </div>
-                    )}
+        // return (<div class ='searchList grid grid-2-400 grid-4-600'>
+        //                     {this.props.items.models.map((x) => <ListItem key={x.id} item={x}/>)}
+        //                 </div>
+        //             )}
 }
 //view template for one player
 class Player extends React.Component {
