@@ -181,14 +181,25 @@ form {
         height: 13px;
         margin: 3px;
         margin-top: 28px;
+        filter: invert(60%)
     }
 
     h6 {
-        color: grey;
+        color: black;
         font-family: Arial;
-        font-size: 14px;
+        font-size: 13px;
         margin-left: 30%;
-        margin-top: 20px;
+        margin-top: 28px;
+        font-weight: normal;
+    }
+
+    #replay {
+        float: left;
+        margin-left: 50px;
+    }
+
+    #last {
+        margin-right: 50px;
     }
 }
 
@@ -246,3 +257,5 @@ img {
     height: 100%;
     width: 100%;
 }
+
+

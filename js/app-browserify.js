@@ -49,8 +49,9 @@ class ListItem extends React.Component {
         return (<div className="player">
                         <div className="top">
                         <div id="image"><img src={artwork_url}/></div>
-                        <div id="controls">     
-                        	<img src="./images/volume51.png"/>
+                        <div id="controls">
+                        	<img id="replay" src="./images/replay4.png"/>     
+                        	<img id="last"src="./images/volume51.png"/>
                 			<img src="./images/volume49.png"/>
                 			<img src="./images/volume47.png"/>
                 			<h6>{title}</h6>
