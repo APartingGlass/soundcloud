@@ -31,7 +31,7 @@ window.SoundSearchCollection = Backbone.Collection.extend({
         this.on('sync', console.log(this))
     },
     url: function() {
-        return `https://api.soundcloud.com/tracks?q=${this.query}&client_id=${apikey}`
+        return `https://api.soundcloud.com/tracks.json?client_id=${apikey}&q=${this.query}`
     }
 })
 
@@ -44,7 +44,7 @@ class ListItem extends React.Component {
         var artwork_url = this.props.item.attributes.artwork_url,
             title = this.props.item.attributes.title
 
-        return (   <div className="player">
+        return (<div className="player">
            			 <div className="top">
                 		<div id="image"><img src={artwork_url}/></div>
                 		<div id="controls"><h6>{title}</h6></div>
@@ -62,53 +62,57 @@ class ListView extends React.Component {
         this.props.items.on('sync', () => this.forceUpdate())
     }
     render() {
-        return (<div class ='searchList grid grid-2-400 grid-4-600'>
-                            {this.props.items.models.map((x) => <ListItem key={x.id} item={x}/>)}
-                        </div>
+        var models = this.props.items.query ? this.props.items.models : []
+        return (<div className='searchList'>
+                    {models.map((x) => <ListItem key={x.id} item={x}/>)}
+                </div>
                     )}
 }
 //view template for one player
-class Player extends React.Component {
+class Header extends React.Component {
     constructor(props) {
         super(props)
-        this.props.items.on('sync', () => this.forceUpdate())
+        this.search = this.getSearcher()
+    }
+    getSearcher() {
+        var searchColl = new SoundSearchCollection 
+        React.render(<ListView title='searchResults' items ={searchColl}/>, qs('.results'))
+        var search = function (e) {
+            e.preventDefault()
+            var input = React.findDOMNode(this.refs.searchBox)
+            searchColl.query = input.value
+            searchColl.fetch()
+        }
+        return search
     }
     render() {
-        return (<div class="player">
-            <div class="top">
-                <div id="image"></div>
-                <div id="controls"></div>
-                <div id="player"></div>
+        return (<div>
+            <div className="logo">
+                <img src="./images/logo.png" />
             </div>
-            <div class="bottom"></div>
+            <div id="home">
+                <p>Home</p>
+            </div>
+            <div id="collection">
+                <p>Collection</p>
+            </div>
+            <div></div>
+            <form onChange={(e) => this.search(e)} onSubmit={(e) => e.preventDefault()}>
+                <input type="text" ref='searchBox'/>
+            </form>
         </div>)
     }
 }
-//search function which creates new collection, adds a React view to listen for changes, and fetches data
-var initSearch = function () {
-    var searchColl = new SoundSearchCollection 
-    React.render(<ListView title='searchResults' items ={searchColl}/>, qs('.header'))
-    var search = function (query) {
-        this.collection.query = query
-        this.collection.fetch
-    }
-    search.collection = searchColl
-    return search
-}
-var search = initSearch()
+
+React.render(<Header/>, qs('.header'))
 
 ///test cases for future functionality
-window.songs = []
-var renderSong = (id) => {
-    SC.stream(`/tracks/${id}`, function(sound){
-        window.songs.push(sound)
-})
-}
-
-qs('form').addEventListener('submit', (e) => {
-    e.preventDefault()
-    search(qs('input').value)
-})
+// window.songs = []
+// var renderSong = (id) => {
+    // SC.stream(`/tracks/${id}`, function(sound) {
+        // window.songs.push(sound)
+    // })
+// }
 
 
-
+// search('beatles')
