@@ -43,13 +43,11 @@ class ListItem extends React.Component {
     render() {
         var artwork_url = this.props.item.attributes.artwork_url,
             title = this.props.item.attributes.title
-        return (<li>
-          				<h3>{title}</h3>
-                		<img src={artwork_url}/>
-      
-          
-        
-                </li>)
+
+        return (<div>
+                        <h3>{title}</h3> 
+                        <img src={artwork_url}/>
+                        </div>)
     }
 }
 
@@ -61,9 +59,9 @@ class ListView extends React.Component {
     }
     render() {
         return (<div>
-                        <ul>
+                        <div grid grid-2-400 grid-4-600>
                             {this.props.items.models.map((x) => <ListItem key={x.id} item={x}/>)}
-                        </ul>
+                        </div>
                     </div>)}
 }
 //view template for one player
@@ -92,11 +90,16 @@ var search = function (query) {
 }
 
 ///test cases for future functionality
-SC.stream("/tracks/154826334", function(sound){
-
+window.songs = []
+var renderSong = (id) => {
+    SC.stream(`/tracks/${id}`, function(sound){
+        window.songs.push(sound)
 });
+}
 
 qs('form').addEventListener('submit', (e) => {
     e.preventDefault()
     search(qs('input').value)
 })
+
+renderSong(293)
