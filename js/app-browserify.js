@@ -44,10 +44,14 @@ class ListItem extends React.Component {
         var artwork_url = this.props.item.attributes.artwork_url,
             title = this.props.item.attributes.title
 
-        return (<div>
-                        <h3>{title}</h3> 
-                        <img src={artwork_url}/>
-                        </div>)
+        return (   <div className="player">
+           			 <div className="top">
+                		<div id="image"><img src={artwork_url}/></div>
+                		<div id="controls"><h6>{title}</h6></div>
+                		<div id="song_length"></div>
+            		</div>
+            		<div className="bottom"></div>
+        		</div>)
     }
 }
 
