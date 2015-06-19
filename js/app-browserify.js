@@ -26,7 +26,7 @@ var SoundcloudModel = Backbone.Model.extend({
 })
 
 // A query search of tracks represented by collection
-window.SoundSearchCollection = Backbone.Collection.extend({
+var SoundSearchCollection = Backbone.Collection.extend({
     initialize: function() {
         this.on('sync', console.log(this))
     },
@@ -41,7 +41,13 @@ class ListItem extends React.Component {
         super(props)
         this.state = {
             track: this.props.item.id,
-            playing: false
+            playing: false,
+            position: 0
+        }
+    }
+    checkTime() {
+        if (this.state.song) {
+            this.setState({position: this.state.song.getCurrentPosition()})
         }
     }
     toggleSong() {
@@ -49,18 +55,24 @@ class ListItem extends React.Component {
             this.state.song.pause()
         } else {
             if(this.state.song){
+                console.log(this.state)
                 this.state.song.play()
             } else {
                 SC.stream(`/tracks/${this.state.track}`, (sound) => {
-                    this.setState({song: sound})
+                    this.setState({song: sound, total: sound.getDuration()})
                     sound.play()
+                    window.setInterval(() => this.checkTime(), 1000)
                 })
             }
         }
         this.setState({ playing: !this.state.playing})
     }
+    restartSong() {
+        if (this.state.song) {
+            this.state.song.seek(0)
+        }
+    }
     render() {
-        console.log(this.props)
         var artwork_url = this.props.item.attributes.artwork_url,
             title = this.props.item.attributes.title,
             likes = this.props.item.attributes.likes_count,
@@ -70,13 +82,16 @@ class ListItem extends React.Component {
                         <div className="top">
                         <div id="image" onClick={() => this.toggleSong()}><img src={artwork_url}/></div>
                         <div id="controls">
-                        	<img id="replay" src="./images/replay4.png"/>     
+                        	<img onClick={() => this.restartSong()} id="replay" src="./images/replay4.png"/>     
                         	<img id="last"src="./images/volume51.png"/>
                 			<img src="./images/volume49.png"/>
                 			<img src="./images/volume47.png"/>
                 			<h6>{title}</h6>
                         </div>
-                        <div id="song_length"></div>
+                        <div id="song_length">
+                            <progress data-current={this.state.position} data-total={this.state.total}> 
+                            </progress>
+                        </div>
                     </div>
                     <div className="bottom">
                     	<img id="logo" src="./images/online36.png"/>
@@ -89,13 +104,12 @@ class ListItem extends React.Component {
                 </div>)
     }
 }
-
 //view template of search list
 class ListView extends React.Component {
     constructor(props) {
         super(props)
         this.props.items.on('sync', () => this.forceUpdate())
-    }
+    }   
     render() {
         var models = this.props.items.query ? this.props.items.models : []
         return (<div className='searchList'>
@@ -110,10 +124,9 @@ class Header extends React.Component {
         this.search = this.getSearcher()
     }
     getSearcher() {
-        var searchColl = new SoundSearchCollection 
+        window.searchColl = new SoundSearchCollection 
         React.render(<ListView title='searchResults' items ={searchColl}/>, qs('.results'))
-        var search = function (e) {
-            e.preventDefault()
+        var search = function () {
             var input = React.findDOMNode(this.refs.searchBox)
             searchColl.query = input.value
             searchColl.fetch()
