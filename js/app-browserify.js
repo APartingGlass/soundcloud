@@ -29,6 +29,7 @@ var SoundcloudModel = Backbone.Model.extend({
 var SoundSearchCollection = Backbone.Collection.extend({
     initialize: function() {
         this.on('sync', console.log(this))
+        // this.fetch = _.debounce(this.fetch, 1000)
     },
     url: function() {
         return `https://api.soundcloud.com/tracks.json?client_id=${apikey}&q=${this.query}`
@@ -79,26 +80,25 @@ class ListItem extends React.Component {
             played = this.props.item.attributes.playback_count
 
         return (<div className="player">
-                        <div className="top">
-                        <div id="image" onClick={() => this.toggleSong()}><img src={artwork_url}/></div>
-                        <div id="controls">
-                        	<img onClick={() => this.restartSong()} id="replay" src="./images/replay4.png"/>     
-                        	<img id="last"src="./images/volume51.png"/>
-                			<img src="./images/volume49.png"/>
-                			<img src="./images/volume47.png"/>
-                			<h6>{title}</h6>
+                    <div className="top">
+                        <div className="album" onClick={() => this.toggleSong()}><img src={artwork_url}/></div>
+                        <div className="controls">
+                        	<img onClick={() => this.restartSong()} id="replay" src="../images/curvearrow4.svg"/>     
+                        	<img id="last"src="../images/speaker113.svg"/>
+                			<img src="../images/sound35.svg"/>
+                			<h5>{title}</h5>
                         </div>
-                        <div id="song_length">
-                            <progress data-current={this.state.position} data-total={this.state.total}> 
+                        <div className="song_length">
+                            <progress data-current={Math.floor(this.state.position /1000)} data-total={Math.floor(this.state.total /1000)}> 
                             </progress>
                         </div>
                     </div>
                     <div className="bottom">
-                    	<img id="logo" src="./images/online36.png"/>
+                    	<img className="logo" src="../images/soundcloud3.svg"/>
                     	<p>BUY</p>
-                		<img src="./images/play107.png"/>
+                		<img src="../images/play43.svg"/>
                 		<h6>{played}</h6>
-                		<img src="./images/favorite21.png"/>
+                		<img src="../images/favorite21.svg"/>
                 		<h6>{likes}</h6>
                     </div>
                 </div>)
@@ -134,22 +134,11 @@ class Header extends React.Component {
         return search
     }
     render() {
-        return (<div>
-        	<div className="header">
-            <div className="logo">
-                <img src="./images/logo.png" />
-            </div>
-            <div id="home">
-                <p>Home</p>
-            </div>
-            <div id="collection">
-                <p>Collection</p>
-            </div>
-            <div></div>
+        return (<div className='searchbar'>
+            <img className='logo' src="../images/soundcloud3.svg" />
             <form onChange={(e) => this.search(e)} onSubmit={(e) => e.preventDefault()}>
                 <input type="text" ref='searchBox'/>
             </form>
-            </div>
         </div>)
     }
 }
